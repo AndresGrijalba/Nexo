@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "275986404918",
+    "project_id": "nexo-32b30",
+    "storage_bucket": "nexo-32b30.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275986404918:android:26389d4b5328ec7437aa97",
+        "android_client_info": {
+          "package_name": "com.campus.nexo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "275986404918-7glea13lmsb404jatl94oiquejc22tol.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campus.nexo",
+            "certificate_hash": "d1a7e9753a83a509baf8687f97f649916134ba72"
+          }
+        },
+        {
+          "client_id": "275986404918-mgdotscqgnauh6l46fcisd7uort97i4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABiY6PBlp-uGeI6UPS7gFUvLSrHoaB5Hc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "275986404918-mgdotscqgnauh6l46fcisd7uort97i4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
