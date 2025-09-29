@@ -1,11 +1,7 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:nexo/features/settings/screens/settings_screen.dart';
-import 'package:nexo/features/web/screens/web_screen.dart';
-
 import '../../features/home/screens/home_screen.dart';
 
 class FloatingIconBarScaffold extends StatefulWidget {
@@ -69,7 +65,7 @@ class _FloatingIconBarScaffoldState extends State<FloatingIconBarScaffold> {
                 color: Theme.of(context).colorScheme.primary.withAlpha(20),
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: Colors.white.withAlpha(20),
+                  color: Theme.of(context).colorScheme.primary.withAlpha(300),
                 ),
               ),
               child: Row(
@@ -117,12 +113,12 @@ class _FloatingIconBarScaffoldState extends State<FloatingIconBarScaffold> {
                   IconButton(
                     icon: _selectedIndex == 3
                         ? HugeIcon(
-                      icon: HugeIcons.strokeRoundedHome03,
+                      icon: HugeIcons.strokeRoundedAiBook,
                       color: Theme.of(context).colorScheme.primary,
                       size: 28,
                     )
                         : HugeIcon(
-                      icon: HugeIcons.strokeRoundedHome03,
+                      icon: HugeIcons.strokeRoundedAiBook,
                       size: 28,
                     ),
                     onPressed: () => _onItemTapped(3),
