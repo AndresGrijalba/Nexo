@@ -44,6 +44,9 @@ dependencies:
   eva_icons_flutter: ^3.1.0
   flutter_svg: ^2.2.1
   google_sign_in: ^7.2.0
+  flutter_launcher_icons: ^0.14.4
+  ionicons: ^0.2.2
+  hugeicons: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +58,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+flutter_launcher_icons:
+  android: true
+  image_path: "assets/images/logos/nexologopremium256.png"
+  background_color: "#000000"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

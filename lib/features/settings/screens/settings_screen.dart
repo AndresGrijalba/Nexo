@@ -15,9 +15,11 @@ class SettingsScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final user = FirebaseAuth.instance.currentUser;
 
-    return DrawerScaffold(
-      title: 'Configuración',
-      currentRoute: '/settings',
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Configuración"),
+        centerTitle: true,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -161,7 +163,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20)
+          const SizedBox(height: 80)
         ],
       ),
     );

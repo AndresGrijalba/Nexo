@@ -19,7 +19,7 @@ class AuthWrapper extends StatelessWidget {
 
         if (snapshot.hasData) {
           Future.microtask(() {
-            Navigator.pushReplacementNamed(context, AppRoutes.settings);
+            Navigator.pushReplacementNamed(context, AppRoutes.navigator);
           });
         } else {
           Future.microtask(() {

@@ -9,7 +9,7 @@ class AulaWebViewPage extends StatefulWidget {
 }
 
 class _AulaWebViewPageState extends State<AulaWebViewPage> {
-  final initialUrl = 'https://aulaweb.unicesar.edu.co/';
+  final initialUrl = 'https://aulaweb.unicesar.edu.co/login/index.php?loginredirect=1';
   late final InAppWebViewController webViewController;
 
   @override
