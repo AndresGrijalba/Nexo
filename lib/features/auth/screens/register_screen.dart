@@ -59,7 +59,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 28),
 
-                // Card con formulario
                 Card(
                   elevation: 2,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -117,21 +116,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 48,
                             child: ElevatedButton(
                               onPressed: () async {
+                                final messenger = ScaffoldMessenger.of(context);
+                                final navigator = Navigator.popAndPushNamed(context, AppRoutes.home);
+
                                 _formKey.currentState?.save();
                                 if (_formKey.currentState?.validate() == true) {
                                   final v = _formKey.currentState?.value;
                                   var result = await _auth.createAccount(v?['email'], v?['password']);
 
                                   if (result == 1) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    messenger.showSnackBar(
                                       const SnackBar(content: Text('Error, la contraseña es muy débil.')),
                                     );
                                   } else if (result == 2) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    messenger.showSnackBar(
                                       const SnackBar(content: Text('Error, el correo ya está en uso.')),
                                     );
                                   } else if (result != null) {
-                                    Navigator.popAndPushNamed(context, AppRoutes.home);
+                                    navigator;
                                   }
                                 }
                               },
