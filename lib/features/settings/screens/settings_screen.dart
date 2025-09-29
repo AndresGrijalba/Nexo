@@ -1,10 +1,9 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nexo/features/settings/widgets/custom_list_tile.dart';
 import 'package:nexo/routes.dart';
-import '../../../share/widgets/drawer_scaffold.dart';
 import '../../auth/services/auth_service.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -15,9 +14,11 @@ class SettingsScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final user = FirebaseAuth.instance.currentUser;
 
-    return DrawerScaffold(
-      title: 'Configuración',
-      currentRoute: '/settings',
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Configuración"),
+        centerTitle: true,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -48,17 +49,15 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 12),
               ElevatedButton.icon(
                 onPressed: () {},
-                icon: const Icon(
-                  Icons.camera_alt_outlined,
-                  size: 18,
-                  color: Colors.white,
+                icon: const HugeIcon(
+                  icon: HugeIcons.strokeRoundedImageUpload,
+                  size: 20,
                 ),
                 label: const Text(
                   "Editar foto de perfil",
-                  style: TextStyle(color: Colors.grey),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white10,
+                  backgroundColor: Theme.of(context).colorScheme.primary.withAlpha(200),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -81,17 +80,17 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const CustomListTile(
-            leading: Icon(Icons.edit_outlined),
+            leading: HugeIcon(icon: HugeIcons.strokeRoundedPencilEdit01),
             title: "Andres Grijalba",
             subtitle: "Toca para cambiar tu nombre",
           ),
           CustomListTile(
-            leading: Icon(Icons.alternate_email_outlined),
+            leading: HugeIcon(icon: HugeIcons.strokeRoundedMailAtSign02),
             title: user?.email ?? "Sin correo registrado",
             subtitle: "Correo",
           ),
           const CustomListTile(
-            leading: Icon(EvaIcons.infoOutline),
+            leading: HugeIcon(icon: HugeIcons.strokeRoundedInformationCircle),
             title: "✈️",
             subtitle: "Info",
           ),
@@ -109,19 +108,19 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           CustomListTile(
-            leading: Icon(EvaIcons.colorPaletteOutline),
+            leading: HugeIcon(icon: HugeIcons.strokeRoundedPaintBoard),
             title: "Personalización",
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.theme);
             },
           ),
           CustomListTile(
-            leading: Icon(EvaIcons.lockOutline),
+            leading: HugeIcon(icon: HugeIcons.strokeRoundedLockPassword),
             title: "Privacidad y seguridad",
             onTap: () {},
           ),
           CustomListTile(
-            leading: Icon(Icons.notifications_outlined),
+            leading: HugeIcon(icon: HugeIcons.strokeRoundedNotification01),
             title: "Notificaciones y sonidos",
             onTap: () {},
           ),
@@ -143,7 +142,7 @@ class SettingsScreen extends StatelessWidget {
                 await AuthService().signOut();
                 Navigator.pushReplacementNamed(context, AppRoutes.login);
               },
-              icon: const Icon(Icons.logout, color: Colors.white),
+              icon: const HugeIcon(icon: HugeIcons.strokeRoundedLogoutSquare01, color: Colors.white),
               label: const Text(
                 "Cerrar sesión",
                 style: TextStyle(
@@ -161,7 +160,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20)
+          const SizedBox(height: 80)
         ],
       ),
     );

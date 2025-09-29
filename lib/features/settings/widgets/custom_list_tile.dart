@@ -29,6 +29,9 @@ class CustomListTile extends StatelessWidget {
           )
               : null,
           onTap: onTap,
+          splashColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          focusColor: Colors.transparent,
         ),
         Container(
           height: 1,

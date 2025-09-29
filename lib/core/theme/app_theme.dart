@@ -21,9 +21,9 @@ class AppTheme{
         secondary: mainColor,
       ),
       fontFamily: 'Inter',
-      scaffoldBackgroundColor: const Color(0xFF1d1c2e),
+      scaffoldBackgroundColor: const Color(0xFF1A1A1A),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF1d1c2e),
+        backgroundColor: Color(0xFF1A1A1A),
       ),
     );
   }
