@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nexo/routes.dart';
 
 import '../services/auth_service.dart';
@@ -42,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       padding: const EdgeInsets.all(2),
                       child: Image.asset(
-                        'assets/images/logos/nexologo.png',
+                        'assets/logos/nexologo.png',
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -129,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       const SnackBar(content: Text('Error, parametros incorrectos.')),
                                     );
                                   } else if (result != null) {
-                                    Navigator.popAndPushNamed(context, AppRoutes.settings);
+                                    Navigator.popAndPushNamed(context, AppRoutes.navigator);
                                   }
                                 }
                               },
@@ -153,35 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 12),
 
-                          // Separador
-                          Row(children: [
-                            Expanded(child: Divider(color: Colors.grey.shade300)),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                              child: Text('o', style: TextStyle(color: Colors.grey[600])),
-                            ),
-                            Expanded(child: Divider(color: Colors.grey.shade300)),
-                          ]),
-
-                          const SizedBox(height: 12),
-
-                          OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: const FaIcon(
-                              FontAwesomeIcons.google,
-                              color: Color(0xFF1dd4d2),
-                              size: 20,
-                            ),
-                            label: const Text(
-                              'Inicia sesión con Google',
-                              style: TextStyle(color: Color(0xFF1dd4d2)),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              side: const BorderSide(color: Color(0xFF1dd4d2)),
-                            ),
-                          ),
                         ],
                       ),
                     ),

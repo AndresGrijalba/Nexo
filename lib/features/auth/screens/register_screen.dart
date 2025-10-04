@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:nexo/features/auth/services/auth_service.dart';
 import 'package:nexo/routes.dart';
 
@@ -15,6 +16,12 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final AuthService _auth = AuthService();
+
+  static const _programOptions = <String>[
+    'Ingeniería de Sistemas',
+    'Ingeniería Electrónica',
+    'Ingeniería Ambiental',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fit: BoxFit.contain,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
                     Text('Crear cuenta',
                         style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
@@ -57,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 28),
+                const SizedBox(height: 18),
 
                 Card(
                   elevation: 2,
@@ -70,9 +77,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           _FieldInput(
+                            name: 'name',
+                            label: 'Nombres y apellidos',
+                            hint: 'Nombre completo',
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.only(left: 12, right: 8),
+                              child: HugeIcon(icon: HugeIcons.strokeRoundedUser, size: 18, color: Colors.white),
+                            ),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(),
+                              FormBuilderValidators.minLength(3),
+                            ]),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          _FieldSelect(
+                            name: 'program',
+                            label: 'Programa',
+                            hint: 'Selecciona tu programa',
+                            icon: Icons.school,
+                            items: _programOptions,
+                            validator: FormBuilderValidators.required(),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          _FieldInput(
                             name: 'email',
                             label: 'Correo electrónico',
-                            hint: 'tucorreo@unicesar.edu.co',
+                            hint: 'Ingresa tu correo ',
                             icon: Icons.email,
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
@@ -81,6 +115,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
 
                           const SizedBox(height: 12),
+
+                          // PASSWORD
                           _FieldInput(
                             name: 'password',
                             label: 'Contraseña',
@@ -94,11 +130,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
 
                           const SizedBox(height: 12),
+
+                          // CONFIRM PASSWORD
                           _FieldInput(
                             name: 'confirm_password',
                             label: 'Confirmar contraseña',
                             hint: '••••••••',
-                            icon: Icons.lock_outline,
+                            icon: Icons.lock,
                             obscure: true,
                             validator: (val) {
                               if (val == null || val.isEmpty) {
@@ -112,17 +150,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
 
                           const SizedBox(height: 20),
+
+                          // BOTÓN REGISTRARSE
                           SizedBox(
                             height: 48,
                             child: ElevatedButton(
                               onPressed: () async {
                                 final messenger = ScaffoldMessenger.of(context);
-                                final navigator = Navigator.popAndPushNamed(context, AppRoutes.home);
-
                                 _formKey.currentState?.save();
+
                                 if (_formKey.currentState?.validate() == true) {
-                                  final v = _formKey.currentState?.value;
-                                  var result = await _auth.createAccount(v?['email'], v?['password']);
+                                  final v = _formKey.currentState!.value;
+                                  final email = (v['email'] as String).trim();
+                                  final password = (v['password'] as String).trim();
+                                  final name = (v['name'] as String).trim();
+                                  final program = (v['program'] as String).trim();
+
+                                  final result = await _auth.createAccount(email, password);
 
                                   if (result == 1) {
                                     messenger.showSnackBar(
@@ -132,8 +176,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     messenger.showSnackBar(
                                       const SnackBar(content: Text('Error, el correo ya está en uso.')),
                                     );
-                                  } else if (result != null) {
-                                    navigator;
+                                  } else if (result is String && result.isNotEmpty) {
+
+                                    final uid = result;
+                                    final username = _deriveUsernameFromEmail(email);
+
+                                    try {
+                                      await FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(uid)
+                                          .set({
+                                        'name': name,
+                                        'program': program,
+                                        'username': username,
+                                        'updatedAt': FieldValue.serverTimestamp(),
+                                      }, SetOptions(merge: true));
+                                    } catch (_) {
+                                    }
+
+                                    if (context.mounted) {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        AppRoutes.navigator,
+                                            (Route<dynamic> route) => false,
+                                      );
+                                    }
                                   }
                                 }
                               },
@@ -153,10 +220,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
 
-                          const SizedBox(height: 12),
 
                           // Separador
-                          Row(children: [
+                          /*Row(children: [
                             Expanded(child: Divider(color: Colors.grey.shade300)),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -167,7 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                           const SizedBox(height: 12),
 
-                          // Botón Google
+                          // Botón Google (sin cambios)
                           OutlinedButton.icon(
                             onPressed: () {},
                             icon: const FaIcon(
@@ -184,16 +250,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               side: const BorderSide(color: Color(0xFF1dd4d2)),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 6),
 
-                // Link a login
+                // Link a login (sin cambios)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -219,28 +285,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-/// Campo reutilizable con el mismo estilo que el login
 class _FieldInput extends StatelessWidget {
   final String name;
   final String label;
   final String hint;
-  final IconData icon;
+  final IconData? icon;
+  final Widget? prefixIcon;
   final bool obscure;
   final String? Function(String?)? validator;
+  final Color? hintColor;
 
   const _FieldInput({
     required this.name,
     required this.label,
     required this.hint,
-    required this.icon,
+    this.icon,
+    this.prefixIcon,
     this.obscure = false,
     this.validator,
+    this.hintColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
-
+    final Widget leading = prefixIcon ??
+        Icon(icon, size: 18, color: Colors.grey[600]!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -252,7 +322,8 @@ class _FieldInput extends StatelessWidget {
           validator: validator,
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(icon, size: 18, color: Colors.grey[600]),
+            hintStyle: TextStyle(color: hintColor ?? Colors.grey[500]),
+            prefixIcon: prefixIcon,
             suffixIcon: obscure
                 ? Icon(Icons.visibility_off, size: 18, color: Colors.grey[400])
                 : null,
@@ -272,6 +343,89 @@ class _FieldInput extends StatelessWidget {
             filled: true,
             fillColor: Theme.of(context).cardColor,
           ),
+        ),
+      ],
+    );
+  }
+}
+
+String _deriveUsernameFromEmail(String email) {
+  final local = (email.split('@').first).trim();
+  var cleaned = local.replaceAll(RegExp(r'\d'), '');
+
+  cleaned = cleaned.toLowerCase();
+  cleaned = cleaned.replaceAll(RegExp(r'[^a-z._-]'), '');
+  cleaned = cleaned.replaceAll(RegExp(r'[._-]{2,}'), '_');
+  cleaned = cleaned.replaceAll(RegExp(r'^[._-]+|[._-]+$'), '');
+  if (cleaned.isEmpty) {
+    cleaned = local.toLowerCase().replaceAll(RegExp(r'\s+'), '');
+  }
+  return cleaned;
+}
+
+class _FieldSelect extends StatelessWidget {
+  final String name;
+  final String label;
+  final String hint;
+  final IconData icon;
+  final List<String> items;
+  final String? Function(String?)? validator;
+
+  const _FieldSelect({
+    required this.name,
+    required this.label,
+    required this.hint,
+    required this.icon,
+    required this.items,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: textStyle.bodySmall?.copyWith(color: Colors.grey[700])),
+        const SizedBox(height: 6),
+        FormBuilderDropdown<String>(
+          name: name,
+          validator: validator,
+          hint: Align(
+            alignment: Alignment.centerLeft,
+            child: Text('Selecciona tu programa'),
+          ),
+          isExpanded: true,
+          alignment: AlignmentDirectional.centerStart,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon, size: 18, color: Colors.grey[600]),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey.shade200),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(color: Color(0xFF1dd4d2)),
+            ),
+            filled: true,
+            fillColor: Theme.of(context).cardColor,
+          ),
+
+          items: items.map((p) {
+            return DropdownMenuItem<String>(
+              value: p,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(p),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );
