@@ -1,10 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:nexo/features/profile/screens/profile_screen.dart';
-
-import '../../../routes.dart';
-import '../../../share/widgets/drawer_scaffold.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,45 +11,36 @@ class HomeScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Inicio"),
         centerTitle: true,
-        leadingWidth: 44,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 12),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
-            },
-            child: Center(
-              child: SizedBox(
-                width: 28,
-                height: 28,
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: const Text(
-                    'AG',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+        leadingWidth: 60,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              },
+              child: Center(
+                child: SizedBox(
+                  width: 35,
+                  height: 35,
+                  child: CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    child: const Text(
+                      'AG',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: HugeIcon(icon: HugeIcons.strokeRoundedSettings02),
-            iconSize: 28,
-            padding: EdgeInsets.only(right: 10),
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.settings);
-            },
           ),
         ],
       ),
