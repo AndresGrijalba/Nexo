@@ -140,7 +140,7 @@ class SettingsScreen extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: () async {
                 await AuthService().signOut();
-                Navigator.pushReplacementNamed(context, AppRoutes.login);
+                Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (Route<dynamic> route) => false,);
               },
               icon: const HugeIcon(icon: HugeIcons.strokeRoundedLogoutSquare01, color: Colors.white),
               label: const Text(
